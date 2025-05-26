@@ -14,26 +14,5 @@ class TestHTMLNode(unittest.TestCase):
             node.props_to_html(),
             ' class="greeting" href="https://boot.dev"',
         )
-    """ def test_values(self):
-        node = HTMLNode(
-            "div",
-            "I wish I could read",
-        )
-        self.assertEqual(
-            node.tag,
-            "div",
-        )
-        self.assertEqual(
-            node.value,
-            "I wish I could read",
-        )
-        self.assertEqual(
-            node.children,
-            [],
-        )
-        self.assertEqual(
-            node.props,
-            {},
-        ) """
 if __name__ == "__main__":
     unittest.main()  
