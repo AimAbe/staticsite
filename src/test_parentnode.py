@@ -40,20 +40,28 @@ class TestParentNode(unittest.TestCase):
             "ParentNode must have a tag"
         ) 
 
-'''
-Empty List of Children:
-What should happen if a ParentNode is constructed with an empty list for children? Should it raise an error, or produce something like <div></div>? Why?
-
-Children with Different Node Types:
-What if you mix LeafNode and ParentNode as siblings inside a parent? Does your code handle that variety without raising an error?
-
-Recursive Nesting:
-If you build a three- or four-level nested set of ParentNode objects, does the output stay correctly formed? Could you accidentally introduce duplicate or missing tags?
-
-Invalid Children:
-What if a child that's not an HTMLNode (like a string or a number) is included in the children list? Should your class raise an error? If so, have you checked for this?
-
-Props Argument:
-How does your class handle optional props? If you add attributes to your nodes (e.g., <div class="foo">), do those attributes appear properly in the HTML output?
-
-'''
+    def test_to_html_with_empty_children(self):
+        parent_node = ParentNode("div", [])
+        self.assertEqual(parent_node.to_html(), "<div></div>")
+        
+    def test_to_html_with_invalid_child(self):
+        with self.assertRaises(TypeError) as cm:
+            parent_node = ParentNode("div", ["invalid_child"])
+            parent_node.to_html()
+        
+        self.assertEqual(
+            str(cm.exception), 
+            "Child must be an instance of HTMLNode"
+        )
+    def test_to_html_with_props(self):
+        child_node = LeafNode("span", "child")
+        props = {'class': 'foo', 'id': 'bar'}
+        parent_node = ParentNode("div", [child_node], props)
+        self.assertEqual(
+            parent_node.to_html(),
+            '<div class="foo" id="bar"><span>child</span></div>'
+        )
+# This code is a test suite for the ParentNode class, which is part of a static site generator.
+# It checks various scenarios to ensure that the ParentNode behaves correctly when generating HTML output.
+if __name__ == "__main__":
+    unittest.main()
