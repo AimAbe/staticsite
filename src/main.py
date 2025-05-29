@@ -7,30 +7,20 @@ def main():
     print(node)
 
 def text_node_to_html_node(text_node):
-    if TextType.NORMAL == text_node.text_type:
-        return f'<a href="{text_node.url}">{text_node.text}</a>'
-    elif TextType.HEADING == text_node.text_type:
-        return f'<h1>{text_node.text}</h1>'
+    if TextType.TEXT == text_node.text_type:
+        return LeafNode(None, text_node.text)
     elif TextType.BOLD == text_node.text_type:
-        return f'<strong>{text_node.text}</strong>'
+        return LeafNode('b', text_node.text)
     elif TextType.ITALIC == text_node.text_type:
-        return f'<em>{text_node.text}</em>'
+        return LeafNode('i', text_node.text)
     elif TextType.CODE == text_node.text_type:
-        return f'<code>{text_node.text}</code>'
+        return LeafNode('code', text_node.text)
     elif TextType.LINK == text_node.text_type:
-        return f'<a href="{text_node.url}">{text_node.text}</a>'
+        return LeafNode('a', text_node.text, {'href': text_node.url})
     elif TextType.IMAGE == text_node.text_type:
-        return f'<img src="{text_node.url}" alt="{text_node.text}">'
+        return LeafNode('img', '', {'src': text_node.url, 'alt': text_node.text})
     else:
         raise ValueError(f"Unknown text type: {text_node.text_type}")
-    ''' see you're on the right track with the structure, but there are a few important things to consider:
 
-Return type: The lesson asks you to return a LeafNode object, but you're returning HTML strings. What type of object should this function actually create and return?
-
-TextType values: You're using TextType.NORMAL and TextType.HEADING, but looking at the lesson requirements, what are the actual TextType enum values you need to handle?
-
-HTML tags: Some of your HTML tags don't match what the lesson specifies. For example, what tag should TextType.BOLD use according to the requirements?
-
-Let's start with the first point - instead of returning HTML strings, what kind of object should you be creating? And do you have the necessary imports at the top of your file to create that type of object?'''
-     
+    
 main()

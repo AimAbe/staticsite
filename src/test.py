@@ -1,8 +1,41 @@
 import unittest
 
 from parentnode import ParentNode 
+from htmlnode import HTMLNode
 from leafnode import LeafNode
+from textnode import TextNode, TextType
 
+class TestHTMLNode(unittest.TestCase):
+    def test_props_to_html(self):
+        node = HTMLNode(
+            "div",
+            "Hello, world!",
+            None,
+            {"class": "greeting", "href": "https://boot.dev"},
+        )
+        self.assertEqual(
+            node.props_to_html(),
+            ' class="greeting" href="https://boot.dev"',
+        )
+
+class TestTextNode(unittest.TestCase):
+    def test_eq(self):
+        node = TextNode("This is a text node", TextType.BOLD)
+        node2 = TextNode("This is a text node", TextType.BOLD)
+        self.assertEqual(node, node2)
+
+    def test_eq_false(self):
+        node = TextNode("This is a text node", TextType.BOLD)
+        node2 = TextNode("This is a text node", TextType.ITALIC)
+        self.assertNotEqual(node, node2)
+    
+    def test_url(self):
+       node = TextNode("This is a text node", TextType.BOLD, "https://www.boot.dev")
+       self.assertEqual(node.url, "https://www.boot.dev")   
+       node2 = TextNode("This is a text node", TextType.BOLD)
+       self.assertNotEqual(node, node2)     
+       self.assertEqual(node2.url, None) 
+       
 class TestParentNode(unittest.TestCase):
     def test_to_html_with_children(self):
         child_node = LeafNode("span", "child")
@@ -61,7 +94,21 @@ class TestParentNode(unittest.TestCase):
             parent_node.to_html(),
             '<div class="foo" id="bar"><span>child</span></div>'
         )
-# This code is a test suite for the ParentNode class, which is part of a static site generator.
-# It checks various scenarios to ensure that the ParentNode behaves correctly when generating HTML output.
+
+
+class TestLeafNode(unittest.TestCase):
+    def test_to_html(self):
+        node = LeafNode("p", "Hello, world!")
+        self.assertEqual(node.to_html(), "<p>Hello, world!</p>")
+    def test_to_html_with_props(self):
+        node = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
+        self.assertEqual(node.to_html(), '<a href="https://www.google.com">Click me!</a>')
+    def test_to_html_no_tag(self):
+        node = LeafNode(None, "Hello, world!")
+        self.assertEqual(node.to_html(), "Hello, world!")
+    def test_to_html_no_value(self):
+        node = LeafNode("p", None)
+        self.assertRaises(ValueError, node.to_html)
+
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main()  
